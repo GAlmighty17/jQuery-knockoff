@@ -18,32 +18,28 @@
 // 4. it should support method chaining
 // >  $('.my-class-name').hide().show().attr() ..
 
-//**
-// 1. export $ (param) => {
-
-//   this.ele = document.querySelector(param)
-//   const hide = () => {}; return this }
-// 2. $.prototype.hide = () => {this.ele; return this}
-
 "use-strict";
 
-function $(query) {
-  this.ele = document.querySelector(query);
-  this.on = function (eventType, callback) {
-    this.ele.addEventListener(eventType, callback);
-    return this;
+window.$ = function (query) {
+  var ele = document.querySelector(query);
+  var jQueryObj = {
+    ele,
+    on: function (eventType, callback) {
+      ele.addEventListener(eventType, callback);
+      return jQueryObj;
+    },
+    hide: function () {
+      ele.style.display = "none";
+      return jQueryObj;
+    },
+    show: function () {
+      ele.style.display = "";
+      return jQueryObj;
+    },
+    attr: function (key, value) {
+      ele.setAttribute(key, value);
+      return jQueryObj;
+    }
   };
-  this.hide = function () {
-    this.ele.style.display = "none";
-    return this;
-  };
-  this.show = function () {
-    this.ele.style.display = "";
-    return this;
-  };
-  this.attr = function (key, value) {
-    this.ele.setAttribute(key, value);
-    return this;
-  };
-  return this;
-}
+  return jQueryObj;
+};
